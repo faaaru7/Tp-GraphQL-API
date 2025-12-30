@@ -1,0 +1,97 @@
+type Author {
+  idA: ID!
+  name: String!
+  age: Int
+  nationality: String
+  books: [Book]
+}
+
+type Book {
+  idBook: ID!
+  title: String!
+  publicationYear: Int
+  language: String
+  nbPages: Int
+  author: Author
+  category: Category
+}
+
+type Category {
+  idC: ID!
+  categoryName: String!
+  parentCategory: Category
+  subCategories: [Category]
+  books: [Book]
+}
+
+type PageInfo {
+  page: Int
+  size: Int
+  totalItems: Int
+  remainingItems: Int
+}
+
+type BookPage {
+  books: [Book]
+  pageInfo: PageInfo
+}
+
+enum SearchType {
+  BOOK
+  AUTHOR
+  CATEGORY
+}
+
+type SearchResult {
+  books: [Book]
+  authors: [Author]
+  categories: [Category]
+  pageInfo: PageInfo
+}
+
+type Query {
+books: [Book]
+  bookByid(id: ID!): Book
+
+  authors: [Author]
+  authorByid(id: ID!): Author
+
+  categories: [Category]
+  categoryByid(id: ID!): Category
+
+ 
+  listBooks(page: Int!, size: Int!): [Book]
+  listBooksFilterd(
+    page: Int!
+    size: Int!
+    publicationYear: Int
+    language: String
+    categoryId: ID
+  ): BookPage
+
+booksByCategory(categoryId: ID!, recursive: Boolean): [Book]
+booksByAuthor(authorId: ID!): [Book]
+
+searchByKeyword(
+    keyword: String!
+    type: SearchType!
+    page: Int!
+    size: Int!
+  ): SearchResult
+}
+
+
+type Mutation {
+
+  addBook(
+    title: String!,
+    publicationYear: Int!,
+    language: String!,
+    nbPages: Int!,
+    authorId: ID!,
+    categoryId: ID!
+  ): Book
+
+  deleteAuthor(authorId: ID!): Boolean
+}
+
