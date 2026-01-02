@@ -119,143 +119,158 @@ INSERT INTO book (title, publication_year, language, nb_pages, author_ida, categ
 ('Americanah',2013,'English',477,68,17),
 ('My Brilliant Friend',2011,'Italian',331,69,17),
 ('Flights',2007,'Polish',403,70,17);
-  
-
--- =========================
--- INSERT BOOKS (SUITE)
--- =========================
 INSERT INTO book (title, publication_year, language, nb_pages, author_ida, category_idc) VALUES
 ('War and Peace',1869,'Russian',1225,12,16),
 ('Anna Karenina',1877,'Russian',864,12,16),
 ('Crime and Punishment',1866,'Russian',671,13,16),
 ('The Brothers Karamazov',1880,'Russian',824,13,16),
 ('The Idiot',1869,'Russian',656,13,16),
-
 ('Don Quixote',1605,'Spanish',1023,39,16),
 ('Love in the Time of Cholera',1985,'Spanish',320,14,7),
 ('Chronicle of a Death Foretold',1981,'Spanish',260,14,7),
-
 ('The Divine Comedy',1320,'Italian',798,60,14),
 ('Invisible Cities',1972,'Italian',165,40,17),
-
 ('The Great Gatsby',1925,'English',180,7,16),
 ('To Kill a Mockingbird',1960,'English',281,6,16),
 ('Moby Dick',1851,'English',635,5,16),
-
 ('Jane Eyre',1847,'English',500,3,7),
 ('Wuthering Heights',1847,'English',416,33,7),
-
 ('The Catcher in the Rye',1951,'English',214,52,17),
 ('Lord of the Flies',1954,'English',224,43,17),
 ('Fahrenheit 451',1953,'English',249,18,4),
 ('Brave New World',1932,'English',311,43,4),
-
 ('Dracula',1897,'English',418,53,10),
 ('Frankenstein',1818,'English',280,53,10),
-
 ('The Little Prince',1943,'French',96,17,19),
 ('Les Fleurs du mal',1857,'French',160,15,14),
-
 ('The Trial',1925,'German',255,21,16),
 ('Steppenwolf',1927,'German',237,34,16),
-
 ('Middlemarch',1871,'English',880,33,16),
 ('Great Expectations',1861,'English',505,4,16),
-
 ('Bel-Ami',1885,'French',365,13,16),
 ('Germinal',1885,'French',592,11,16),
-
 ('The Alchemist',1988,'Portuguese',320,58,17),
 ('Life of Pi',2001,'English',310,55,17),
-
 ('The Book Thief',2005,'English',300,68,18),
 ('The Kite Runner',2003,'English',371,68,7),
-
 ('Kafka on the Shore',2002,'Japanese',330,21,9),
 ('Norwegian Wood',1987,'Japanese',340,21,7),
-
 ('Blindness',1995,'Portuguese',290,54,17),
 ('The Road',2006,'English',287,48,9),
-
 ('White Noise',1985,'English',326,62,17),
 ('Underworld',1997,'English',827,62,17),
-
 ('Infinite Jest',1996,'English',1079,52,17),
 ('American Pastoral',1997,'English',423,52,17),
-
 ('Half of a Yellow Sun',2006,'English',433,68,17),
 ('Purple Hibiscus',2003,'English',307,68,17),
-
 ('Flights',2007,'Polish',403,70,17),
 ('Drive Your Plow Over the Bones of the Dead',2009,'Polish',275,70,6);
--- =========================
--- INSERT BOOKS (FINAL → 170)
--- =========================
 INSERT INTO book (title, publication_year, language, nb_pages, author_ida, category_idc) VALUES
 ('Madame Bovary',1856,'French',329,3,16),
 ('Le Rouge et le Noir',1830,'French',576,18,16),
 ('À la recherche du temps perdu',1913,'French',4215,20,16),
 ('The Sun Also Rises',1926,'English',251,6,16),
 ('For Whom the Bell Tolls',1940,'English',471,6,16),
-
 ('Lolita',1955,'English',336,52,17),
 ('Pale Fire',1962,'English',256,52,17),
 ('Ada or Ardor',1969,'English',589,52,17),
-
 ('The Master and Margarita',1967,'Russian',384,12,4),
 ('Doctor Zhivago',1957,'Russian',592,12,8),
-
 ('The Sound and the Fury',1929,'English',326,7,16),
 ('As I Lay Dying',1930,'English',267,7,16),
-
 ('The Metamorphosis',1915,'German',201,21,16),
 ('Letters to Milena',1952,'German',320,21,3),
-
 ('A Clockwork Orange',1962,'English',192,43,4),
 ('Slaughterhouse-Five',1969,'English',275,58,4),
 ('Catch-22',1961,'English',453,58,6),
-
 ('One Flew Over the Cuckoo''s Nest',1962,'English',320,38,16),
 ('East of Eden',1952,'English',601,5,16),
-
 ('Rebecca',1938,'English',456,33,9),
 ('To the Lighthouse',1927,'English',209,23,16),
-
 ('Heart of Darkness',1899,'English',165,4,16),
 ('Lord Jim',1900,'English',417,4,16),
-
 ('The Picture of Dorian Gray',1890,'English',254,43,16),
 ('Dr Jekyll and Mr Hyde',1886,'English',141,43,10),
-
 ('The Three Musketeers',1844,'French',700,39,16),
 ('The Count of Monte Cristo',1844,'French',1276,39,16),
-
 ('Journey to the Center of the Earth',1864,'French',420,39,4),
 ('Around the World in 80 Days',1873,'French',352,39,4),
-
 ('Pippi Longstocking',1945,'Swedish',160,65,19),
 ('The Girl with the Dragon Tattoo',2005,'Swedish',465,44,9),
-
 ('The Girl Who Played with Fire',2006,'Swedish',550,44,9),
 ('The Girl Who Kicked the Hornets'' Nest',2007,'Swedish',650,44,9),
-
 ('Miss Smilla''s Feeling for Snow',1992,'Danish',352,64,9),
 ('Let the Right One In',2004,'Swedish',288,64,10),
-
 ('White Teeth',2000,'English',448,67,17),
 ('On Beauty',2005,'English',445,67,17),
-
 ('The Brief Wondrous Life of Oscar Wao',2007,'English',330,62,17),
 ('Middlesex',2002,'English',529,62,17),
-
 ('The God of Small Things',1997,'English',250,55,17),
 ('Life of Pi',2001,'English',310,55,17),
-
 ('Sorry',2023,'Italian',200,69,7),
 ('Friends',1991,'Italian',681,69,12),
-
 ('Me Before You',2012,'English',480,35,7),
 ('The Time Traveler''s Wife',2003,'English',546,35,7),
-
 ('Merry Me',2008,'Polish',200,70,7),
+(' Wife',2003,'English',290,35,7),
+('The Time Traveler''s Wife',2003,'English',546,35,7),
+('Marry Me',2008,'Polish',200,70,7),
+('The Wife',2003,'English',290,35,7),
+('Silent Night',2001,'English',310,40,3),
+('Lost in Paris',2005,'French',280,45,4),
+('Broken Dreams',2010,'English',350,55,5),
+('Ocean Deep',2012,'English',420,60,6),
+('Red Moon',2014,'Spanish',390,58,2),
+('Hidden Truth',2011,'English',330,50,1),
+('Dark Roads',2009,'English',360,52,3),
+('Golden Age',2006,'French',300,48,4),
+('Last Hope',2015,'English',410,65,6),
+('Cold Winter',2002,'Russian',270,42,2),
+('Fallen Star',2013,'English',380,59,5),
+('Blue Horizon',2016,'English',450,68,7),
+('Quiet Voice',2004,'English',290,44,1),
+('Desert Wind',2007,'Arabic',320,46,3),
+('Final Chapter',2018,'English',500,70,6),
+('Shadow Game',2011,'English',340,54,4),
+('Sweet Memory',2000,'English',260,38,2),
+('Iron Will',2017,'English',470,70,5),
+('White Rose',2005,'French',310,47,1),
+('Night Walker',2008,'English',360,56,3),
+('Crystal Sky',2019,'English',520,47,7),
+('Burning Path',2014,'English',400,62,6),
+('Lost Signal',2016,'English',430,67,4),
+('Silver Line',2003,'English',295,43,2),
+('Old Letters',2001,'English',275,40,1),
+('Dark Silence',2012,'English',365,58,5),
+('Open Sea',2010,'English',390,60,3),
+('Final Wish',2018,'English',480,69,6),
+('Golden Dust',2009,'Spanish',340,55,4),
+('True Love',2004,'English',300,45,2),
+('Broken Wings',2011,'English',370,57,5),
+('Last Summer',2006,'English',320,48,1),
+('Hidden Path',2013,'English',410,63,6),
+('Wild Heart',2015,'English',440,69,7),
+('Cold Fire',2007,'English',330,50,3),
+('Silent River',2002,'English',280,41,2),
+('Bright Dawn',2019,'English',510,70,6),
+('Final Journey',2020,'English',540,2,7),
+('Lost Shadow',2014,'English',395,61,4),
+('Fading Light',2008,'English',355,54,3),
+('Endless Night',2016,'English',465,7,5),
+('Soft Rain',2005,'English',305,46,1),
+('Black Horizon',2017,'English',485,4,6),
+('Golden Silence',2010,'French',360,56,2),
+('Hidden Voice',2012,'English',375,58,4),
+('Final Promise',2021,'English',560,8,7),
+('New Beginning',2022,'English',590,9,7),
+('Silent Echo',2009,'English',340,52,3),
+('Broken Mirror',2011,'English',370,55,4),
+('Golden Horizon',2015,'English',420,63,6),
+('Whispering Wind',2007,'English',310,46,2),
+('Dark Promise',2013,'English',390,59,5),
+('Endless Road',2016,'English',450,68,7),
+('Hidden Flame',2010,'English',360,54,3),
+('Last Sunrise',2018,'English',480,2,6),
+('Falling Stars',2014,'English',400,61,4),
+('New Dawn',2020,'English',520,8,7),
 ('My Friends',2010,'Polish',200,70,17);

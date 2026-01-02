@@ -50,17 +50,10 @@ type SearchResult {
 }
 
 type Query {
-books: [Book]
-  bookByid(id: ID!): Book
-
+  books: [Book]
   authors: [Author]
-  authorByid(id: ID!): Author
-
   categories: [Category]
-  categoryByid(id: ID!): Category
-
- 
-  listBooks(page: Int!, size: Int!): [Book]
+  listBooks(page: Int, size: Int): BookPage!
   listBooksFilterd(
     page: Int!
     size: Int!
@@ -68,10 +61,8 @@ books: [Book]
     language: String
     categoryId: ID
   ): BookPage
-
 booksByCategory(categoryId: ID!, recursive: Boolean): [Book]
 booksByAuthor(authorId: ID!): [Book]
-
 search(
     keyword: String!
     type: SearchType!
@@ -82,7 +73,6 @@ search(
 
 
 type Mutation {
-
   addBook(
     title: String!,
     publicationYear: Int!,
@@ -91,7 +81,6 @@ type Mutation {
     authorId: ID!,
     categoryId: ID!
   ): Book
-
-  deleteAuthor(authorId: ID!): Boolean
+  deleteAuthor(id: ID!): Boolean
 }
 

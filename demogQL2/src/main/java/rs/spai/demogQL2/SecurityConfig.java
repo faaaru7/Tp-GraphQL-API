@@ -1,43 +1,33 @@
 package rs.spai.demogQL2;
-import java.beans.Customizer;
-
+import static org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-
-
-//définit un seul utilisateur admin avec rôle ADMIN. En prod, tu utiliserais une base de données.
-
 @Configuration
 public class SecurityConfig {
-	
+    //Définition des utilisateurs stockés en mémoire (In-memory)
 	 @Bean
 	    public InMemoryUserDetailsManager userDetailsService() {
-	        UserDetails admin = User.withDefaultPasswordEncoder()
-	            .username("admin")       // ton username
-	            .password("admin123")    // ton password
-	            .roles("ADMIN")          // rôle admin
+	        @SuppressWarnings("deprecation")
+			UserDetails admin = withDefaultPasswordEncoder().username("admin")     //nom utilisateur  
+	            .password("admin")  //mot de passe
+	            .roles("ADMIN")          //le role
 	            .build();
-	        return new InMemoryUserDetailsManager(admin);
+	        return new InMemoryUserDetailsManager(admin);         // Retourne un gestionnaire d'utilisateurs en mémoire avec l'utilisateur admin
 	    }
-
 	 @Bean
 	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	        http
-	            .csrf(csrf -> csrf.disable())  // désactiver CSRF
+	            .csrf(csrf -> csrf.disable()) 
 	            .authorizeHttpRequests(auth -> auth
-	                .requestMatchers("/graphql").authenticated() // protéger GraphQL
+	                .requestMatchers("/graphql").authenticated()  // Nécessite l'authentification pour /graphql
 	                .anyRequest().permitAll()
 	            )
-	            .httpBasic(httpBasic -> {}); // httpBasic avec configuration par défaut
-
+	            // Active l'authentification HTTP Basic
+	            .httpBasic(httpBasic -> {}); 
 	        return http.build();
 	    }
 }

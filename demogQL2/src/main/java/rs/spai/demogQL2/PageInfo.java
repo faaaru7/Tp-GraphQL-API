@@ -3,10 +3,10 @@ package rs.spai.demogQL2;
 
 public class PageInfo {
 	
-	 private int page;
-	    private int size;
-	    private int totalItems;
-	    private int remainingItems;
+	 private int page;  //numéro de page 
+	    private int size; //nombre d'éléments par page
+	    private int totalItems; //nbr totale des livres
+	    private int remainingItems; //nbr des page d93do 
 	    
 	    
 	    public PageInfo() {
