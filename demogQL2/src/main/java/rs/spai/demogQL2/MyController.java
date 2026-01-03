@@ -137,6 +137,10 @@ public class MyController {
     public List<Book> booksByAuthor(@Argument Long authorId) {
         return bRepo.findBooksByAuthorId(authorId);
     }
+    
+    
+    
+    
    //search using key word 
     @QueryMapping
     public SearchResult search(
@@ -226,31 +230,58 @@ public class MyController {
     //Part 2
     
     @MutationMapping
-    @PreAuthorize("hasRole('ADMIN')")   //just l'admin qui acceder
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public Book addBook(
-        @Argument String title,
-        @Argument Integer publicationYear,
-        @Argument String language,
-        @Argument Integer nbPages,
-        @Argument Long authorId,
-        @Argument Long categoryId
+            @Argument String title,
+            @Argument Integer publicationYear,
+            @Argument String language,
+            @Argument Integer nbPages,
+            @Argument Long authorId,
+            @Argument Long categoryId
     ) {
-        Author author = aRepo.findById(authorId) //vérifier if le author existe
-                .orElseThrow(() -> new RuntimeException("Author not found"));  
+        Author author = getAuthorById(authorId);
+        Category category = getCategoryById(categoryId);
 
-        Category category = cRepo.findById(categoryId)  //vérifier if category existe
-                .orElseThrow(() -> new RuntimeException("Category not found")); 
-       //Ajouter new book
-        Book book = new Book();
-        book.setTitle(title);
-        book.setPublicationYear(publicationYear);
-        book.setLanguage(language);
-        book.setNbPages(nbPages);
-        book.setAuthor(author);
-        book.setCategory(category);
+        Book book = buildBook(
+                title,
+                publicationYear,
+                language,
+                nbPages,
+                author,
+                category
+        );
 
         return bRepo.save(book);
     }
+    private Author getAuthorById(Long id) {
+        return aRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Author not found"));
+    }
+
+    private Category getCategoryById(Long id) {
+        return cRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+    }
+
+    private Book buildBook(
+            String title,
+            Integer year,
+            String language,
+            Integer pages,
+            Author author,
+            Category category
+    ) {
+        Book book = new Book();
+        book.setTitle(title);
+        book.setPublicationYear(year);
+        book.setLanguage(language);
+        book.setNbPages(pages);
+        book.setAuthor(author);
+        book.setCategory(category);
+        return book;
+    }
+
     
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')") //just l'admin qui acceder
