@@ -63,6 +63,8 @@ type Query {
   ): BookPage
 booksByCategory(categoryId: ID!, recursive: Boolean): [Book]
 booksByAuthor(authorId: ID!): [Book]
+booksByAuthorName(authorName: String!): [Book]
+
 search(
     keyword: String!
     type: SearchType!

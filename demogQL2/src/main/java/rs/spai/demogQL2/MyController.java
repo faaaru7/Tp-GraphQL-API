@@ -51,16 +51,16 @@ public class MyController {
         int offset = size * (page - 1);  //par exemple page = 1 → offset = 0
         long totalItems = bRepo.count();  //nbr totale des livres 
         List<Book> books =
-                bRepo.findBooksWithPagination(size, offset);
+                bRepo.findBooksWithPagination(size, offset);     //tjib les livres par offset
         int remainingItems =    //chhal 93do les livres
-                Math.max(0, (int) totalItems - (page * size));   
+                Math.max(0, (int) totalItems - (page * size));   //par exmple 170 - (1*10)=160
 
         PageInfo info = new PageInfo();
-        info.setPage(page);
-        info.setSize(size);
-        info.setTotalItems((int) totalItems);
-        info.setRemainingItems(remainingItems);
-
+        info.setPage(page); //numéro de page
+        info.setSize(size); //size de page
+        info.setTotalItems((int) totalItems); //totale des livres
+        info.setRemainingItems(remainingItems); //rest des livres
+ 
         BookPage pageResult = new BookPage();
         pageResult.setBooks(books);
         pageResult.setPageInfo(info);
@@ -74,10 +74,10 @@ public class MyController {
             @Argument Integer publicationYear,
             @Argument String language,
             @Argument Long categoryId) {
-        if (page == null || page < 1) page = 1;
-        if (size == null || size < 1) size = 10;
-        int offset = (page - 1) * size;
-        List<Book> books = bRepo.findFilteredBooks(
+        if (page == null || page < 1) page = 1; //pardéfaut 1
+        if (size == null || size < 1) size = 10; //pardéfaut 10
+        int offset = (page - 1) * size;  
+        List<Book> books = bRepo.findFilteredBooks(     //tjib les livres par offset
                 publicationYear,
                 language,
                 categoryId,
@@ -102,13 +102,13 @@ public class MyController {
     }
     //Fetching books of a selected category (recursive or not)
     @QueryMapping
-    public List<Book> booksByCategory(
+    public List<Book> booksByCategory(   //listes des livres par category
             @Argument Long categoryId,
             @Argument Boolean recursive // true pour or false
     ) {
         Category category = cRepo.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        List<Long> categoryIds;
+                .orElseThrow(() -> new RuntimeException("Category not found"));  //if this category existe
+        List<Long> categoryIds; //category by id
 
         if (Boolean.TRUE.equals(recursive)) {    //if recursive
             categoryIds = getAllCategoryIds(category);
@@ -117,66 +117,66 @@ public class MyController {
         }
         return bRepo.findBooksByCategoryIds(categoryIds);
     }
-    //pour get all category
+    //pour get all subcategory et category
     private List<Long> getAllCategoryIds(Category category) {
         List<Long> idsub = new ArrayList<>();
         idsub.add(category.getIdC()); 
 
         if (category.getSubCategories() != null && !category.getSubCategories().isEmpty()) {  //if existe a sub gategory
-            for (Category sub : category.getSubCategories()) {   
-                idsub.addAll(getAllCategoryIds(sub));    //get sub category
+            for (Category sub : category.getSubCategories()) {    //On appelle récursivement getAllCategoryIds(sub)
+                idsub.addAll(getAllCategoryIds(sub));    //get sub category et category
             }
         }
         return idsub;
-    }   
-    
+    }  
 
     
  //Les livres by authors  
     @QueryMapping
     public List<Book> booksByAuthor(@Argument Long authorId) {
-        return bRepo.findBooksByAuthorId(authorId);
+        return bRepo.findBooksByAuthorId(authorId);  //trové les livers d'un authors
     }
-    
-    
-    
+    @QueryMapping
+    public List<Book> booksByAuthorName(@Argument String authorName) {
+        return bRepo.findBooksByAuthorName(authorName); 
+    }
     
    //search using key word 
     @QueryMapping
-    public SearchResult search(
-            @Argument String keyword,
-            @Argument SearchType type,
-            @Argument Integer page,
-            @Argument Integer size
+    public SearchResult search(   //la méthode principale
+            @Argument String keyword,  //le mot clé 
+            @Argument SearchType type, //author , book , category
+            @Argument Integer page,  //numéro de page 
+            @Argument Integer size  //nombre d'éléments par page
     ) {
-        int pageNum = (page == null || page < 1) ? 1 : page;
-        int pageSize = (size == null || size < 1) ? 10 : size;
+        int pageNum = (page == null || page < 1) ? 1 : page;  //pardéfaut page=1
+        int pageSize = (size == null || size < 1) ? 10 : size; //pardéfaur size=10
 
-        var pageable = PageRequest.of(pageNum - 1, pageSize);
+        var pageable = PageRequest.of(pageNum - 1, pageSize); //par exemple livres 1 → 10 pour pageNum = 0      livres 11 → 20 pour pageNum = 1
 
-        SearchResult result = new SearchResult();
+        SearchResult result = new SearchResult();   //résultat final
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPage(pageNum);
         pageInfo.setSize(pageSize);
 
         if (type == null) {
-            type = SearchType.BOOK;
+            type = SearchType.BOOK;     //si type est null pardéfaut book
         }
 
-        if (type == SearchType.BOOK) {
+        if (type == SearchType.BOOK) {  //si le type est livre
             handleBookSearch(keyword, pageable, pageNum, pageSize, result, pageInfo);
         }
 
-        if (type == SearchType.AUTHOR) {
+        if (type == SearchType.AUTHOR) { //si le type est author
             handleAuthorSearch(keyword, pageable, pageNum, pageSize, result, pageInfo);
         }
 
-        if (type == SearchType.CATEGORY) {
+        if (type == SearchType.CATEGORY) {  //si le type est category
             handleCategorySearch(keyword, pageable, pageNum, pageSize, result, pageInfo);
         }
 
         result.setPageInfo(pageInfo);
-        return result;
+        return result;   
     }
     private void handleBookSearch(
             String keyword,
@@ -186,12 +186,12 @@ public class MyController {
             SearchResult result,
             PageInfo pageInfo
     ) {
-        List<Book> books = bRepo.searchByTitle(keyword, pageable);
-        long total = bRepo.countByTitle(keyword);
+        List<Book> books = bRepo.searchByTitle(keyword, pageable);  //rechercher les livres par le mot clé 
+        long total = bRepo.countByTitle(keyword);   //le nbr totale des livres 
 
-        pageInfo.setTotalItems((int) total);
-        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));
-        result.setBooks(books);
+        pageInfo.setTotalItems((int) total); //nombre total d’éléments trouvés
+        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size))); //nombre d’éléments restants
+        result.setBooks(books);   //remplit le résultat
     }
 
     private void handleAuthorSearch(
@@ -202,12 +202,12 @@ public class MyController {
             SearchResult result,
             PageInfo pageInfo
     ) {
-        List<Author> authors = aRepo.searchByName(keyword, pageable);
-        long total = aRepo.countByName(keyword);
+        List<Author> authors = aRepo.searchByName(keyword, pageable);  //rechercher les authors par le mot clé 
+        long total = aRepo.countByName(keyword); //le nbr totale des authors
 
-        pageInfo.setTotalItems((int) total);
-        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));
-        result.setAuthors(authors);
+        pageInfo.setTotalItems((int) total);//nombre total d’éléments trouvés
+        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size))); //nombre d’éléments restants
+        result.setAuthors(authors); //remplit le résultat
     }
 
     private void handleCategorySearch(
@@ -218,21 +218,21 @@ public class MyController {
             SearchResult result,
             PageInfo pageInfo
     ) {
-        List<Category> categories = cRepo.searchByName(keyword, pageable);
-        long total = cRepo.countByName(keyword);
+        List<Category> categories = cRepo.searchByName(keyword, pageable);   //rechercher les categorys par le mot clé 
+        long total = cRepo.countByName(keyword);  //le nbr totale des categorys
 
-        pageInfo.setTotalItems((int) total);
-        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));
-        result.setCategories(categories);
+        pageInfo.setTotalItems((int) total);//nombre total d’éléments trouvés
+        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));//nombre d’éléments restants
+        result.setCategories(categories);//remplit le résultat
     }
 
     
     //Part 2
-    
-    @MutationMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //Ajouter un Livre 
+    @MutationMapping   //pour ajouter et modifier les données 
+    @PreAuthorize("hasRole('ADMIN')")  //just l'admin qui acceder
     @Transactional
-    public Book addBook(
+    public Book addBook(   //les données pour créer un livre
             @Argument String title,
             @Argument Integer publicationYear,
             @Argument String language,
@@ -240,8 +240,8 @@ public class MyController {
             @Argument Long authorId,
             @Argument Long categoryId
     ) {
-        Author author = getAuthorById(authorId);
-        Category category = getCategoryById(categoryId);
+        Author author = getAuthorById(authorId);   //if le author est existe
+        Category category = getCategoryById(categoryId);  //if le category est existe
 
         Book book = buildBook(
                 title,
@@ -254,18 +254,17 @@ public class MyController {
 
         return bRepo.save(book);
     }
-    private Author getAuthorById(Long id) {
+    private Author getAuthorById(Long id) {  //pour rechercher un author est existe ou pas 
         return aRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Author not found"));
     }
 
     private Category getCategoryById(Long id) {
-        return cRepo.findById(id)
+        return cRepo.findById(id)   //pour rechercher une category existe ou pas
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
-
     private Book buildBook(
-            String title,
+            String title,  //pour créer un livre
             Integer year,
             String language,
             Integer pages,
@@ -281,14 +280,13 @@ public class MyController {
         book.setCategory(category);
         return book;
     }
-
-    
+    //Supprimer un Author
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')") //just l'admin qui acceder
     @Transactional
-    public Boolean deleteAuthor(@Argument Integer id) { 
-        return aRepo.findById(id.longValue()).map(author -> {
-            bRepo.deleteAll(author.getBooks());
+    public Boolean deleteAuthor(@Argument Integer id) {  
+        return aRepo.findById(id.longValue()).map(author -> {   //Cherche l’auteur dans la base de données par son ID.
+            bRepo.deleteAll(author.getBooks()); //Supprime tous les livres liés à cet auteur
             aRepo.delete(author);  //supprimer l'author
             return true;
         }).orElse(false);
