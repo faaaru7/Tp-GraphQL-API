@@ -70,6 +70,10 @@ public class Book {
 		public void setCategory(Category category) {
 			this.category = category;
 		}
+		public static Object builder() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	    
 
 	  

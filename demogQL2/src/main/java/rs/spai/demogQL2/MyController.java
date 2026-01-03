@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
@@ -41,7 +40,7 @@ public class MyController {
     public List<Category> categories() {
         return cRepo.findAll();
     }
-
+ //Part 01:
  //Liste Book with Remaining Items and size par défaut 10
     @QueryMapping
     public BookPage listBooks(@Argument Integer page,
@@ -138,52 +137,93 @@ public class MyController {
     public List<Book> booksByAuthor(@Argument Long authorId) {
         return bRepo.findBooksByAuthorId(authorId);
     }
-    
-  
-   
    //search using key word 
     @QueryMapping
     public SearchResult search(
             @Argument String keyword,
-            @Argument SearchType type,  //book category or author
+            @Argument SearchType type,
             @Argument Integer page,
             @Argument Integer size
     ) {
-        if (page == null || page < 1) page = 1;
-        if (size == null || size < 1) size = 10;
-        Pageable pageable = PageRequest.of(page - 1, size);
+        int pageNum = (page == null || page < 1) ? 1 : page;
+        int pageSize = (size == null || size < 1) ? 10 : size;
+
+        var pageable = PageRequest.of(pageNum - 1, pageSize);
+
         SearchResult result = new SearchResult();
         PageInfo pageInfo = new PageInfo();
-        pageInfo.setPage(page);
-        pageInfo.setSize(size);
+        pageInfo.setPage(pageNum);
+        pageInfo.setSize(pageSize);
 
-        switch (type) {
-            case BOOK -> {
-                List<Book> books = bRepo.searchByTitle(keyword, pageable);   //by title
-                long totalBooks = bRepo.countByTitle(keyword);
-                pageInfo.setTotalItems((int) totalBooks);
-                pageInfo.setRemainingItems((int) Math.max(0, totalBooks - page * size));   //thsab d93do
-                result.setBooks(books);
-            }
-            case AUTHOR -> {
-                List<Author> authors = aRepo.searchByName(keyword, pageable);  //by author name
-                long totalAuthors = aRepo.countByName(keyword);
-                pageInfo.setTotalItems((int) totalAuthors);
-                pageInfo.setRemainingItems((int) Math.max(0, totalAuthors - page * size));
-                result.setAuthors(authors);
-            }
-            case CATEGORY -> {
-                List<Category> categories = cRepo.searchByName(keyword, pageable);
-                long totalCategories = cRepo.countByName(keyword);
-                pageInfo.setTotalItems((int) totalCategories);
-                pageInfo.setRemainingItems((int) Math.max(0, totalCategories - page * size));
-                result.setCategories(categories);
-            }
+        if (type == null) {
+            type = SearchType.BOOK;
+        }
+
+        if (type == SearchType.BOOK) {
+            handleBookSearch(keyword, pageable, pageNum, pageSize, result, pageInfo);
+        }
+
+        if (type == SearchType.AUTHOR) {
+            handleAuthorSearch(keyword, pageable, pageNum, pageSize, result, pageInfo);
+        }
+
+        if (type == SearchType.CATEGORY) {
+            handleCategorySearch(keyword, pageable, pageNum, pageSize, result, pageInfo);
         }
 
         result.setPageInfo(pageInfo);
         return result;
     }
+    private void handleBookSearch(
+            String keyword,
+            PageRequest pageable,
+            int page,
+            int size,
+            SearchResult result,
+            PageInfo pageInfo
+    ) {
+        List<Book> books = bRepo.searchByTitle(keyword, pageable);
+        long total = bRepo.countByTitle(keyword);
+
+        pageInfo.setTotalItems((int) total);
+        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));
+        result.setBooks(books);
+    }
+
+    private void handleAuthorSearch(
+            String keyword,
+            PageRequest pageable,
+            int page,
+            int size,
+            SearchResult result,
+            PageInfo pageInfo
+    ) {
+        List<Author> authors = aRepo.searchByName(keyword, pageable);
+        long total = aRepo.countByName(keyword);
+
+        pageInfo.setTotalItems((int) total);
+        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));
+        result.setAuthors(authors);
+    }
+
+    private void handleCategorySearch(
+            String keyword,
+            PageRequest pageable,
+            int page,
+            int size,
+            SearchResult result,
+            PageInfo pageInfo
+    ) {
+        List<Category> categories = cRepo.searchByName(keyword, pageable);
+        long total = cRepo.countByName(keyword);
+
+        pageInfo.setTotalItems((int) total);
+        pageInfo.setRemainingItems(Math.max(0, (int) (total - page * size)));
+        result.setCategories(categories);
+    }
+
+    
+    //Part 2
     
     @MutationMapping
     @PreAuthorize("hasRole('ADMIN')")   //just l'admin qui acceder
